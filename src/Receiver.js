@@ -1,55 +1,70 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import settings from "./settings";
 
 function Receiver() {
 
+    console.log("start");
+
     let source;
-    let audioCtx
     let mute, debug, statusLED, canvas, output, visualSelect, ripples, switchBtn
-    let analyser
-    let distortion, gainNode, biquadFilter, convolver
     let canvasCtx, intendedWidth
     let drawVisual;
     let minSpikeIndex, maxSpikeIndex
     let muted = true
-    let bufferLength, dataArray;
+
     let messageFreq = [] // used to store rounded frequencies detected (still with duplicate frequencies)
     let consecutiveRunsWithoutSpikes;
 
-    mute = document.querySelector('.mute');
+    const [ledStatus, setLedStatus] = useState("led-off");
+    const [ripplesStatus, setRipplesStatus] = useState({"visibility": "hidden"});
+
+    const [audioCtx, setAudioCtx] = useState(new window.AudioContext());
+    const [analyser, setAnalyser] = useState(audioCtx.createAnalyser());
+    const [bufferLength, setBufferLength] = useState(null);
+    const [dataArray, setDataArray] = useState(null);
+
+    const [distortion, setDistortion] = useState(audioCtx.createWaveShaper());
+    const [gainNode, setGainNode] = useState(audioCtx.createGain());
+    const [biquadFilter, setBiquadFilter] = useState(audioCtx.createBiquadFilter());
+    const [convolver, setConvolver] = useState(audioCtx.createConvolver());
+
+    useEffect(() => {
+        console.log("start use effect");
+
+        setAudioCtx(new window.AudioContext())
+
+        //set up the different audio nodes we will use for the app
+        setAnalyser(audioCtx.createAnalyser())
+        /*analyser.minDecibels = settings.minDecibels;
+        analyser.maxDecibels = settings.maxDecibels;*/
+        analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
+
+        analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
+        // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
+        setBufferLength(analyser.fftSize/2); // somehow we need a bigger number here to visualize higher frequencies
+        setDataArray(new Float32Array(bufferLength))
+
+        console.log("sample rate " + audioCtx.sampleRate);
+
+        setDistortion( audioCtx.createWaveShaper() );
+        setGainNode( audioCtx.createGain() );
+        setBiquadFilter( audioCtx.createBiquadFilter() );
+        setConvolver( audioCtx.createConvolver() );
+
+        /*audioCtx.suspend()*/
+        setupAudio()
+    },[]);
+
+    /*mute = document.querySelector('.mute');
     debug = document.querySelector('.debug');
     statusLED = document.getElementById('statusLED');
     canvas = document.querySelector('.visualizer');
     output = document.querySelector('#outputForMsg');
     visualSelect = document.getElementById("visual");
     ripples = document.querySelector(".lds-ripple");
-    switchBtn = document.querySelector("#switch");
+    switchBtn = document.querySelector("#switch");*/
 
 
-
-
-    audioCtx = new window.AudioContext();
-
-    //set up the different audio nodes we will use for the app
-    analyser = audioCtx.createAnalyser();
-    /*analyser.minDecibels = settings.minDecibels;
-    analyser.maxDecibels = settings.maxDecibels;*/
-    analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
-
-    analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
-    // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
-    bufferLength = analyser.fftSize/2; // somehow we need a bigger number here to visualize higher frequencies
-    dataArray = new Float32Array(bufferLength);
-
-    console.log("sample rate " + audioCtx.sampleRate);
-
-    distortion = audioCtx.createWaveShaper();
-    gainNode = audioCtx.createGain();
-    biquadFilter = audioCtx.createBiquadFilter();
-    convolver = audioCtx.createConvolver();
-
-    audioCtx.suspend()
-    setupAudio()
 
     async function setupAudio() {
         if (navigator.mediaDevices.getUserMedia) {
@@ -83,36 +98,6 @@ function Receiver() {
                 console.log('The following gUM error occured: ' + err);
             }
 
-            /*navigator.mediaDevices.getUserMedia (
-                // constraints - only audio needed for this app
-                {audio: {
-                        echoCancellation: false,
-                        mozAutoGainControl: false,
-                        mozNoiseSuppression: false,
-                        googEchoCancellation: false,
-                        googAutoGainControl: false,
-                        googNoiseSuppression: false,
-                        googHighpassFilter: false
-                    }},
-
-                // Success callback
-                function(stream) {
-                    console.log("success")
-                    source = audioCtx.createMediaStreamSource(stream);
-                    source.connect(analyser);
-                    analyser.connect(distortion);
-                    distortion.connect(biquadFilter);
-                    biquadFilter.connect(convolver);
-                    convolver.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-
-                },
-
-                // Error callback
-                function(err) {
-                    console.log('The following gUM error occured: ' + err);
-                }
-            );*/
         } else {
             console.log('getUserMedia not supported on your browser!');
         }
@@ -152,18 +137,23 @@ function Receiver() {
     let detectSpikesFuncHandler
 
     function voiceMute() {
+        console.log("audioCtx.state: " + audioCtx.state);
         if (audioCtx.state === 'suspended') {
+            console.log("if");
             muted=false
             //statusLED.className = 'led-on';
+            setLedStatus('led-on')
             /*ripples.style.visibility = "visible";*/
+            setRipplesStatus({"visibility": "visible"})
             audioCtx.resume();
             detectSpikesFuncHandler = window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes);
             //window.setInterval(f => console.log(numberOfRuns),5000) // used to determine speed of detectSpikes_float
         }
         else{
+            console.log("else");
             muted=true
-            //statusLED.className = 'led-off';
-            //ripples.style.visibility = "hidden";
+            setLedStatus('led-off')
+            setRipplesStatus({"visibility": "hidden"})
             audioCtx.suspend();
             clearInterval(detectSpikesFuncHandler)
         }
@@ -216,7 +206,7 @@ function Receiver() {
         //console.log(dataArray[maxIndex] > dbToBeat)
 
         if(dataArray[maxIndex]>dbToBeat){
-            ripples.style.visibility = "visible";
+            setRipplesStatus({"visibility": "visible"})
             /*console.log("Frequencies:" + frequencies.toString()+";")
             console.log("Indices:" + indices.toString()+";")*/
             consecutiveRunsWithoutSpikes=0 // reset because its consecutive runs and we got a spike
@@ -244,7 +234,7 @@ function Receiver() {
         if(consecutiveRunsWithoutSpikes>settings.maxConsecutiveRunsWithoutSpikes){
             console.log("Stopedd");
             consecutiveRunsWithoutSpikes=0 // reset value
-            ripples.style.visibility = "hidden";
+            setRipplesStatus({"visibility": "hidden"})
             voiceMute()
             //decode()
             decodeMFSK()
@@ -257,7 +247,6 @@ function Receiver() {
         // console.log("messageFreq->" + messageFreq)
         //numberOfRuns++
     }
-
 
     function decodeMFSK(){
 
@@ -375,13 +364,14 @@ function Receiver() {
     }
 
 
+
     return (
 
         <div className="controls">
 
             <div className="outerbox">
-                <div className="led-off" id="statusLED"></div>
-                <div style={{"visibility": "hidden"}} className="lds-ripple">
+                <div className={ledStatus} id="statusLED"></div>
+                <div style={ripplesStatus} className="lds-ripple">
                     <div></div>
                     <div></div>
                 </div>
