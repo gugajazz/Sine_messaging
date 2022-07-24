@@ -3,14 +3,13 @@ import settings from "./settings";
 
 function Receiver() {
 
-    console.log("start");
+    //console.log("start");
 
     let source;
     let mute, debug, statusLED, canvas, output, visualSelect, ripples, switchBtn
     let canvasCtx, intendedWidth
     let drawVisual;
     let minSpikeIndex, maxSpikeIndex
-    let muted = true
 
     let messageFreq = [] // used to store rounded frequencies detected (still with duplicate frequencies)
     let consecutiveRunsWithoutSpikes;
@@ -27,6 +26,8 @@ function Receiver() {
     const [gainNode, setGainNode] = useState(audioCtx.createGain());
     const [biquadFilter, setBiquadFilter] = useState(audioCtx.createBiquadFilter());
     const [convolver, setConvolver] = useState(audioCtx.createConvolver());
+    const [muted, setMuted] = useState(true);
+    const [detectSpikesFuncHandler, setDetectSpikesFuncHandler] = useState();
 
     useEffect(() => {
         console.log("start use effect");
@@ -54,16 +55,6 @@ function Receiver() {
         /*audioCtx.suspend()*/
         setupAudio()
     },[]);
-
-    /*mute = document.querySelector('.mute');
-    debug = document.querySelector('.debug');
-    statusLED = document.getElementById('statusLED');
-    canvas = document.querySelector('.visualizer');
-    output = document.querySelector('#outputForMsg');
-    visualSelect = document.getElementById("visual");
-    ripples = document.querySelector(".lds-ripple");
-    switchBtn = document.querySelector("#switch");*/
-
 
 
     async function setupAudio() {
@@ -134,35 +125,40 @@ function Receiver() {
         return total
     }
 
-    let detectSpikesFuncHandler
+
 
     function voiceMute() {
+
         console.log("audioCtx.state: " + audioCtx.state);
+
+
         if (audioCtx.state === 'suspended') {
-            console.log("if");
-            muted=false
+            setMuted(false)
             //statusLED.className = 'led-on';
             setLedStatus('led-on')
             /*ripples.style.visibility = "visible";*/
-            setRipplesStatus({"visibility": "visible"})
+            //setRipplesStatus({"visibility": "visible"})
             audioCtx.resume();
-            detectSpikesFuncHandler = window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes);
+            setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
             //window.setInterval(f => console.log(numberOfRuns),5000) // used to determine speed of detectSpikes_float
         }
         else{
-            console.log("else");
-            muted=true
+            setMuted(true)
             setLedStatus('led-off')
             setRipplesStatus({"visibility": "hidden"})
             audioCtx.suspend();
             clearInterval(detectSpikesFuncHandler)
         }
+
+        console.log("muted: " + muted);
+
     }
 
     let frequencies = []
 
     function detectSpikes_float_mfsk() {
         if(muted){return} // does nothing when muted
+        console.log("pirililalau")
 
 
         //let indices = []
@@ -364,9 +360,7 @@ function Receiver() {
     }
 
 
-
     return (
-
         <div className="controls">
 
             <div className="outerbox">
@@ -383,12 +377,7 @@ function Receiver() {
                 Toggle Mute
             </button>
 
-
-
-
         </div>
-
-
     );
 
 }
