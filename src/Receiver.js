@@ -30,6 +30,7 @@ function Receiver() {
     const [detectSpikesFuncHandler, setDetectSpikesFuncHandler] = useState();
 
     useEffect(() => {
+
         console.log("start use effect");
 
         setAudioCtx(new window.AudioContext())
@@ -56,6 +57,22 @@ function Receiver() {
         setupAudio()
     },[]);
 
+    //let puta = false
+    let [puta, changePuta] = useState(false);
+
+    /*function changePuta(){
+        if(puta===true){
+            puta=false
+            console.log("to false");
+        }
+        else if(puta===false){
+            puta=true
+            console.log("to true");
+        }
+        else{
+            console.log("fudeu");
+        }
+    }*/
 
     async function setupAudio() {
         if (navigator.mediaDevices.getUserMedia) {
@@ -125,32 +142,34 @@ function Receiver() {
         return total
     }
 
-
-
     function voiceMute() {
 
         console.log("audioCtx.state: " + audioCtx.state);
 
 
-        if (audioCtx.state === 'suspended') {
-            setMuted(false)
+        /*if (audioCtx.state === 'suspended') {*/
+        if (muted === true) {
+            console.log("mutedSetToFalse");
+            //setMuted(false)
             //statusLED.className = 'led-on';
             setLedStatus('led-on')
             /*ripples.style.visibility = "visible";*/
             //setRipplesStatus({"visibility": "visible"})
             audioCtx.resume();
-            setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
-            //window.setInterval(f => console.log(numberOfRuns),5000) // used to determine speed of detectSpikes_float
+            //setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
+            //console.log(settings.msBetweenDetectSpikes);
         }
         else{
-            setMuted(true)
+            console.log("mutedSetToTrue");
+            //setMuted(true)
+            //console.log("muted2: " + muted);
             setLedStatus('led-off')
-            setRipplesStatus({"visibility": "hidden"})
+            //setRipplesStatus({"visibility": "hidden"})
             audioCtx.suspend();
-            clearInterval(detectSpikesFuncHandler)
+            //clearInterval(detectSpikesFuncHandler)
         }
 
-        console.log("muted: " + muted);
+        setMuted(!muted)
 
     }
 
@@ -359,6 +378,9 @@ function Receiver() {
         output.value = binary2text(msgDecoded.slice(0,msgDecoded.length))
     }
 
+    function putaHandler(){
+        changePuta(!puta)
+    }
 
     return (
         <div className="controls">
@@ -372,6 +394,8 @@ function Receiver() {
             </div>
 
             <input disabled="disabled" id="outputForMsg" placeholder="recieved text here"/>
+
+            <p>muted is {muted.toString()}</p>
 
             <button onClick={voiceMute}>
                 Toggle Mute
