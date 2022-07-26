@@ -5,6 +5,12 @@ import {useRef, useState} from "react";
 import Sender from "./Sender";
 import Receiver from "./Receiver";
 
+// TODO when building minimize and ofuscate the code
+// TODO on page itself modify the settings.js (and remove unused stuff)
+// TODO change logo
+// TODO add error warning and maybe bring back error checking
+// TODO add support for firefox and ios
+
 function App() {
 
     const [nextPage, setPage] = useState("receive");
