@@ -57,23 +57,6 @@ function Receiver() {
         setupAudio()
     },[]);
 
-    //let puta = false
-    let [puta, changePuta] = useState(false);
-
-    /*function changePuta(){
-        if(puta===true){
-            puta=false
-            console.log("to false");
-        }
-        else if(puta===false){
-            puta=true
-            console.log("to true");
-        }
-        else{
-            console.log("fudeu");
-        }
-    }*/
-
     async function setupAudio() {
         if (navigator.mediaDevices.getUserMedia) {
             //console.log('getUserMedia supported.');
@@ -142,6 +125,25 @@ function Receiver() {
         return total
     }
 
+
+    const intervalRef = useRef();
+
+    function controlInterval(){
+        console.log("killing testing")
+        clearInterval(intervalRef.current);
+    }
+
+    function controlIntervalStart(){
+        console.log("starting testing")
+        intervalRef.current = setInterval(() => {
+            console.log("testing")
+        }, 1000);
+    }
+
+
+
+
+
     function voiceMute() {
 
         console.log("audioCtx.state: " + audioCtx.state);
@@ -156,7 +158,7 @@ function Receiver() {
             /*ripples.style.visibility = "visible";*/
             //setRipplesStatus({"visibility": "visible"})
             audioCtx.resume();
-            //setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
+            setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
             //console.log(settings.msBetweenDetectSpikes);
         }
         else{
@@ -166,7 +168,7 @@ function Receiver() {
             setLedStatus('led-off')
             //setRipplesStatus({"visibility": "hidden"})
             audioCtx.suspend();
-            //clearInterval(detectSpikesFuncHandler)
+            clearInterval(detectSpikesFuncHandler)
         }
 
         setMuted(!muted)
@@ -378,10 +380,6 @@ function Receiver() {
         output.value = binary2text(msgDecoded.slice(0,msgDecoded.length))
     }
 
-    function putaHandler(){
-        changePuta(!puta)
-    }
-
     return (
         <div className="controls">
 
@@ -399,6 +397,14 @@ function Receiver() {
 
             <button onClick={voiceMute}>
                 Toggle Mute
+            </button>
+
+            <button onClick={controlInterval}>
+                Stopp timer
+            </button>
+
+            <button onClick={controlIntervalStart}>
+                Start timer
             </button>
 
         </div>
