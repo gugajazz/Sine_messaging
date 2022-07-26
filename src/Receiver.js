@@ -5,13 +5,8 @@ function Receiver() {
 
     //console.log("start");
 
-    let source;
-    let mute, debug, statusLED, canvas, output, visualSelect, ripples, switchBtn
-    let canvasCtx, intendedWidth
-    let drawVisual;
-    let minSpikeIndex, maxSpikeIndex
+    let output
 
-    let messageFreq = [] // used to store rounded frequencies detected (still with duplicate frequencies)
     let consecutiveRunsWithoutSpikes;
 
     const [ledStatus, setLedStatus] = useState("led-off");
@@ -48,6 +43,7 @@ function Receiver() {
     const biquadFilter = useRef()
     const convolver = useRef()
     const muted = useRef()
+    const source = useRef()
 
     const detectSpikesFuncHandler = useRef();
 
@@ -94,9 +90,9 @@ function Receiver() {
     });*/
 
 
-    function setupAudio() {
+    async function setupAudio() {
 
-        audioCtx.current =  new window.AudioContext()
+        audioCtx.current = new window.AudioContext()
 
         console.log(audioCtx.current);
 
@@ -110,18 +106,18 @@ function Receiver() {
         //console.log("analyser.fftSize"+analyser.fftSize/2)
 
         // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
-        bufferLength.current = analyser.fftSize/2; // somehow we need a bigger number here to visualize higher frequencies
+        bufferLength.current = analyser.fftSize / 2; // somehow we need a bigger number here to visualize higher frequencies
         //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
-        console.log("BufferLength:"+bufferLength)
+        console.log("BufferLength:" + bufferLength)
 
         dataArray.current = new Float32Array(bufferLength)
 
         //console.log("sample rate " + audioCtx.sampleRate);
 
-        distortion.current = audioCtx.current.createWaveShaper() ;
-        gainNode.current = audioCtx.current.createGain() ;
-        biquadFilter.current = audioCtx.current.createBiquadFilter() ;
-        convolver.current = audioCtx.current.createConvolver() ;
+        distortion.current = audioCtx.current.createWaveShaper();
+        gainNode.current = audioCtx.current.createGain();
+        biquadFilter.current = audioCtx.current.createBiquadFilter();
+        convolver.current = audioCtx.current.createConvolver();
 
         audioCtx.current.suspend()
 
@@ -129,28 +125,33 @@ function Receiver() {
             //console.log('getUserMedia supported.');
             //console.log("navigator.mediaDevices"+navigator.mediaDevices)
 
-            let stream = null;
+            let stream;
 
             try {
-                stream = navigator.mediaDevices.getUserMedia({
-                    audio: {
-                        echoCancellation: false,
-                        mozAutoGainControl: false,
-                        mozNoiseSuppression: false,
-                        googEchoCancellation: false,
-                        googAutoGainControl: false,
-                        googNoiseSuppression: false,
-                        googHighpassFilter: false
-                    }
-                });
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            echoCancellation: false,
+                            mozAutoGainControl: false,
+                            mozNoiseSuppression: false,
+                            googEchoCancellation: false,
+                            googAutoGainControl: false,
+                            googNoiseSuppression: false,
+                            googHighpassFilter: false
+                        }
+                    });
+                } catch (err) {
+                    console.log('Error with getUserMedia:' + err);
+                }
+
+
                 /* use the stream */
-                console.log("success")
-                source = audioCtx.current.createMediaStreamSource(stream);
-                source.connect(analyser);
-                analyser.current.connect(distortion);
-                distortion.current.connect(biquadFilter);
-                biquadFilter.current.connect(convolver);
-                convolver.current.connect(gainNode);
+                source.current = audioCtx.current.createMediaStreamSource(stream);
+                source.current.connect(analyser.current);
+                analyser.current.connect(distortion.current);
+                distortion.current.connect(biquadFilter.current);
+                biquadFilter.current.connect(convolver.current);
+                convolver.current.connect(gainNode.current);
                 gainNode.current.connect(audioCtx.current.destination);
             } catch (err) {
                 console.log('The following gUM error occured: ' + err);
@@ -188,7 +189,7 @@ function Receiver() {
 
         setupAudio()
 
-        console.log("audioCtx.state: " + audioCtx.state);
+        console.log("audioCtx.state: " + audioCtx.current.state);
 
 
         /*if (audioCtx.state === 'suspended') {*/
