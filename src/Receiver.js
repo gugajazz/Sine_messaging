@@ -17,47 +17,114 @@ function Receiver() {
     const [ledStatus, setLedStatus] = useState("led-off");
     const [ripplesStatus, setRipplesStatus] = useState({"visibility": "hidden"});
 
-    const [audioCtx, setAudioCtx] = useState(new window.AudioContext());
+    /*const [audioCtx, setAudioCtx] = useState(new window.AudioContext());
     const [analyser, setAnalyser] = useState(audioCtx.createAnalyser());
-    const [bufferLength, setBufferLength] = useState(null);
+    const [bufferLength, setBufferLength] = useState(0);
     const [dataArray, setDataArray] = useState(null);
 
     const [distortion, setDistortion] = useState(audioCtx.createWaveShaper());
     const [gainNode, setGainNode] = useState(audioCtx.createGain());
     const [biquadFilter, setBiquadFilter] = useState(audioCtx.createBiquadFilter());
     const [convolver, setConvolver] = useState(audioCtx.createConvolver());
-    const [muted, setMuted] = useState(true);
-    const [detectSpikesFuncHandler, setDetectSpikesFuncHandler] = useState();
+    const [muted, setMuted] = useState(true);*/
 
-    useEffect(() => {
+    //const [audioCtx, setAudioCtx] = useState(window.AudioContext);
+    /*const [analyser, setAnalyser] = useState(null);
+    const [bufferLength, setBufferLength] = useState(0);
+    const [dataArray, setDataArray] = useState(null);
+
+    const [distortion, setDistortion] = useState(null);
+    const [gainNode, setGainNode] = useState(null);
+    const [biquadFilter, setBiquadFilter] = useState(null);
+    const [convolver, setConvolver] = useState(null);
+    const [muted, setMuted] = useState(true);*/
+
+    const audioCtx = useRef()
+    const analyser = useRef()
+    const bufferLength = useRef()
+    const dataArray = useRef()
+    const distortion = useRef()
+    const gainNode = useRef()
+    const biquadFilter = useRef()
+    const convolver = useRef()
+    const muted = useRef()
+
+    const detectSpikesFuncHandler = useRef();
+
+
+    /*useEffect(() => {
 
         console.log("start use effect");
 
-        setAudioCtx(new window.AudioContext())
+        setAudioCtx( new window.AudioContext() )
 
         //set up the different audio nodes we will use for the app
-        setAnalyser(audioCtx.createAnalyser())
-        /*analyser.minDecibels = settings.minDecibels;
-        analyser.maxDecibels = settings.maxDecibels;*/
+        setAnalyser(audioCtx.createAnalyser() )
+        //analyser.minDecibels = settings.minDecibels;
+        //analyser.maxDecibels = settings.maxDecibels;
+        analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
+
+        //analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
+        //console.log("analyser.fftSize"+analyser.fftSize/2)
+
+        // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
+        setBufferLength(state => (analyser.fftSize/2)); // somehow we need a bigger number here to visualize higher frequencies
+        //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
+        console.log("BufferLength:"+bufferLength)
+
+        //setDataArray(state => ({ ...state, new Float32Array(bufferLength) }))
+
+        //console.log("sample rate " + audioCtx.sampleRate);
+
+        //setDistortion( state => ({ ...state, audioCtx.createWaveShaper() }) );
+        //setGainNode( state => ({ ...state, audioCtx.createGain() }) );
+        //setBiquadFilter( state => ({ ...state, audioCtx.createBiquadFilter() }) );
+        //setConvolver( state => ({ ...state, audioCtx.createConvolver() }) );
+
+        //audioCtx.suspend()
+        //setupAudio()
+    });*/
+
+    /*useEffect(() => {
+        setBufferLength(69);
+        //setAudioCtx( new window.AudioContext() )
+
+
+        console.log("oi");
+    });*/
+
+
+    function setupAudio() {
+
+        audioCtx.current =  new window.AudioContext()
+
+        console.log(audioCtx.current);
+
+        //set up the different audio nodes we will use for the app
+        analyser.current = audioCtx.current.createAnalyser()
+        //analyser.minDecibels = settings.minDecibels;
+        //analyser.maxDecibels = settings.maxDecibels;
         analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
 
         analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
+        //console.log("analyser.fftSize"+analyser.fftSize/2)
+
         // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
-        setBufferLength(analyser.fftSize/2); // somehow we need a bigger number here to visualize higher frequencies
-        setDataArray(new Float32Array(bufferLength))
+        bufferLength.current = analyser.fftSize/2; // somehow we need a bigger number here to visualize higher frequencies
+        //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
+        console.log("BufferLength:"+bufferLength)
 
-        console.log("sample rate " + audioCtx.sampleRate);
+        dataArray.current = new Float32Array(bufferLength)
 
-        setDistortion( audioCtx.createWaveShaper() );
-        setGainNode( audioCtx.createGain() );
-        setBiquadFilter( audioCtx.createBiquadFilter() );
-        setConvolver( audioCtx.createConvolver() );
+        //console.log("sample rate " + audioCtx.sampleRate);
 
-        /*audioCtx.suspend()*/
-        setupAudio()
-    },[]);
+        distortion.current = audioCtx.current.createWaveShaper() ;
+        gainNode.current = audioCtx.current.createGain() ;
+        biquadFilter.current = audioCtx.current.createBiquadFilter() ;
+        convolver.current = audioCtx.current.createConvolver() ;
 
-    async function setupAudio() {
+        audioCtx.current.suspend()
+
         if (navigator.mediaDevices.getUserMedia) {
             //console.log('getUserMedia supported.');
             //console.log("navigator.mediaDevices"+navigator.mediaDevices)
@@ -65,7 +132,7 @@ function Receiver() {
             let stream = null;
 
             try {
-                stream = await navigator.mediaDevices.getUserMedia({
+                stream = navigator.mediaDevices.getUserMedia({
                     audio: {
                         echoCancellation: false,
                         mozAutoGainControl: false,
@@ -78,13 +145,13 @@ function Receiver() {
                 });
                 /* use the stream */
                 console.log("success")
-                source = audioCtx.createMediaStreamSource(stream);
+                source = audioCtx.current.createMediaStreamSource(stream);
                 source.connect(analyser);
-                analyser.connect(distortion);
-                distortion.connect(biquadFilter);
-                biquadFilter.connect(convolver);
-                convolver.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                analyser.current.connect(distortion);
+                distortion.current.connect(biquadFilter);
+                biquadFilter.current.connect(convolver);
+                convolver.current.connect(gainNode);
+                gainNode.current.connect(audioCtx.current.destination);
             } catch (err) {
                 console.log('The following gUM error occured: ' + err);
             }
@@ -115,36 +182,11 @@ function Receiver() {
         return finalStr
     }
 
-    function binary2decimal(binaryStr){
-        let total=0;
-        for(let i=7; i>=0; i--){
-            if(binaryStr[i]==="1"){
-                total += 2**(7-i)
-            }
-        }
-        return total
-    }
-
-
-    const intervalRef = useRef();
-
-    function controlInterval(){
-        console.log("killing testing")
-        clearInterval(intervalRef.current);
-    }
-
-    function controlIntervalStart(){
-        console.log("starting testing")
-        intervalRef.current = setInterval(() => {
-            console.log("testing")
-        }, 1000);
-    }
-
-
-
 
 
     function voiceMute() {
+
+        setupAudio()
 
         console.log("audioCtx.state: " + audioCtx.state);
 
@@ -157,8 +199,8 @@ function Receiver() {
             setLedStatus('led-on')
             /*ripples.style.visibility = "visible";*/
             //setRipplesStatus({"visibility": "visible"})
-            audioCtx.resume();
-            setDetectSpikesFuncHandler(window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes));
+            audioCtx.current.resume();
+            detectSpikesFuncHandler.current = window.setInterval(detectSpikes_float_mfsk, settings.msBetweenDetectSpikes);
             //console.log(settings.msBetweenDetectSpikes);
         }
         else{
@@ -167,24 +209,26 @@ function Receiver() {
             //console.log("muted2: " + muted);
             setLedStatus('led-off')
             //setRipplesStatus({"visibility": "hidden"})
-            audioCtx.suspend();
-            clearInterval(detectSpikesFuncHandler)
+            audioCtx.current.suspend();
+            clearInterval(detectSpikesFuncHandler.current);
+
         }
 
-        setMuted(!muted)
+        muted.current = !muted
 
     }
 
     let frequencies = []
 
     function detectSpikes_float_mfsk() {
-        if(muted){return} // does nothing when muted
-        console.log("pirililalau")
+        /*if(muted===true){console.log("muted"); return} // does nothing when muted*/
+        //console.log("pirililalau")
 
 
         //let indices = []
         let i
         analyser.getFloatFrequencyData(dataArray);
+        console.log(dataArray)
 
 
         let maxIndex, maxValue=-9999;
@@ -394,18 +438,13 @@ function Receiver() {
             <input disabled="disabled" id="outputForMsg" placeholder="recieved text here"/>
 
             <p>muted is {muted.toString()}</p>
+            <p>bufferLenght is {bufferLength.current}</p>
 
             <button onClick={voiceMute}>
                 Toggle Mute
             </button>
 
-            <button onClick={controlInterval}>
-                Stopp timer
-            </button>
 
-            <button onClick={controlIntervalStart}>
-                Start timer
-            </button>
 
         </div>
     );

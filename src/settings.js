@@ -1,14 +1,14 @@
 const settings={
 
-    /*"Code00" : 19600,
-    "Code01" : 19700,
-    "Code10" : 19800,
-    "Code11" : 19900,*/
+    "Code00" : 8200,
+    "Code01" : 8400,
+    "Code10" : 8600,
+    "Code11" : 8800,
 
-    "Code00" : 18200,
-    "Code01" : 18400,
-    "Code10" : 18600,
-    "Code11" : 18800,
+    /*"Code00" : 18200,*/
+    /*"Code01" : 18400,*/
+    /*"Code10" : 18600,*/
+    /*"Code11" : 18800,*/
     "msBetweenDetectSpikes" : 10,
 
     // both
