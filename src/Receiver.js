@@ -1,3 +1,5 @@
+// TODO MAKE IT RUN THE CAPTURE ONLY ON A GIVEN RANGE OF FREQUENCIES TO BE FASTER\
+
 import {useEffect, useRef, useState} from "react";
 import settings from "./settings";
 
@@ -11,7 +13,7 @@ function Receiver() {
 
     const [ledStatus, setLedStatus] = useState("led-off");
     const [ripplesStatus, setRipplesStatus] = useState({"visibility": "hidden"});
-    
+
 
     const audioCtx = useRef()
     const analyser = useRef()
@@ -78,13 +80,13 @@ function Receiver() {
         analyser.current = audioCtx.current.createAnalyser()
         //analyser.minDecibels = settings.minDecibels;
         //analyser.maxDecibels = settings.maxDecibels;
-        analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
+        analyser.current.smoothingTimeConstant = settings.smoothingTimeConstant;
 
-        analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
+        analyser.current.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
         //console.log("analyser.fftSize"+analyser.fftSize/2)
 
         // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
-        bufferLength.current = analyser.fftSize / 2; // somehow we need a bigger number here to visualize higher frequencies
+        bufferLength.current = (analyser.current.fftSize / 2); // somehow we need a bigger number here to visualize higher frequencies
         //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
         console.log("BufferLength:" + bufferLength.current)
 
@@ -142,6 +144,7 @@ function Receiver() {
 
     function freq2index(freq){
         // i * ((audioCtx.sampleRate/2) / bufferLength) = f
+        //console.log("(2*"+bufferLength.current+"*freq)/("+audioCtx.current.sampleRate+")")
         return (2*bufferLength.current*freq)/(audioCtx.current.sampleRate)
     }
 
@@ -202,7 +205,7 @@ function Receiver() {
         //let indices = []
         let i
         analyser.current.getFloatFrequencyData(dataArray.current);
-        //console.log(dataArray.current)
+        console.log(dataArray.current)
 
 
         let maxIndex, maxValue=-9999;
