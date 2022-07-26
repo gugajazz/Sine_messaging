@@ -42,7 +42,7 @@ function Receiver() {
     const gainNode = useRef()
     const biquadFilter = useRef()
     const convolver = useRef()
-    const muted = useRef()
+    const muted = useRef(true)
     const source = useRef()
 
     const detectSpikesFuncHandler = useRef();
@@ -82,12 +82,8 @@ function Receiver() {
     });*/
 
     /*useEffect(() => {
-        setBufferLength(69);
-        //setAudioCtx( new window.AudioContext() )
-
-
-        console.log("oi");
-    });*/
+        muted.current = true
+    }, []);*/
 
 
     async function setupAudio() {
@@ -189,11 +185,8 @@ function Receiver() {
 
         setupAudio()
 
-        console.log("audioCtx.state: " + audioCtx.current.state);
-
-
         /*if (audioCtx.state === 'suspended') {*/
-        if (muted === true) {
+        if (muted.current === true) {
             console.log("mutedSetToFalse");
             //setMuted(false)
             //statusLED.className = 'led-on';
@@ -215,7 +208,7 @@ function Receiver() {
 
         }
 
-        muted.current = !muted
+        muted.current = !(muted.current)
 
     }
 
@@ -225,11 +218,12 @@ function Receiver() {
         /*if(muted===true){console.log("muted"); return} // does nothing when muted*/
         //console.log("pirililalau")
 
+        console.log("audioCtx.state: " + audioCtx.current.state);
 
         //let indices = []
         let i
-        analyser.getFloatFrequencyData(dataArray);
-        console.log(dataArray)
+        analyser.current.getFloatFrequencyData(dataArray.current);
+        console.log(dataArray.current[29])
 
 
         let maxIndex, maxValue=-9999;
@@ -438,7 +432,7 @@ function Receiver() {
 
             <input disabled="disabled" id="outputForMsg" placeholder="recieved text here"/>
 
-            <p>muted is {muted.toString()}</p>
+            <p>muted is {muted.current.toString()}</p>
             <p>bufferLenght is {bufferLength.current}</p>
 
             <button onClick={voiceMute}>
