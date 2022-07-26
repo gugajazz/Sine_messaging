@@ -11,28 +11,7 @@ function Receiver() {
 
     const [ledStatus, setLedStatus] = useState("led-off");
     const [ripplesStatus, setRipplesStatus] = useState({"visibility": "hidden"});
-
-    /*const [audioCtx, setAudioCtx] = useState(new window.AudioContext());
-    const [analyser, setAnalyser] = useState(audioCtx.createAnalyser());
-    const [bufferLength, setBufferLength] = useState(0);
-    const [dataArray, setDataArray] = useState(null);
-
-    const [distortion, setDistortion] = useState(audioCtx.createWaveShaper());
-    const [gainNode, setGainNode] = useState(audioCtx.createGain());
-    const [biquadFilter, setBiquadFilter] = useState(audioCtx.createBiquadFilter());
-    const [convolver, setConvolver] = useState(audioCtx.createConvolver());
-    const [muted, setMuted] = useState(true);*/
-
-    //const [audioCtx, setAudioCtx] = useState(window.AudioContext);
-    /*const [analyser, setAnalyser] = useState(null);
-    const [bufferLength, setBufferLength] = useState(0);
-    const [dataArray, setDataArray] = useState(null);
-
-    const [distortion, setDistortion] = useState(null);
-    const [gainNode, setGainNode] = useState(null);
-    const [biquadFilter, setBiquadFilter] = useState(null);
-    const [convolver, setConvolver] = useState(null);
-    const [muted, setMuted] = useState(true);*/
+    
 
     const audioCtx = useRef()
     const analyser = useRef()
@@ -46,6 +25,9 @@ function Receiver() {
     const source = useRef()
 
     const detectSpikesFuncHandler = useRef();
+
+    let frequencies = []
+
 
 
     /*useEffect(() => {
@@ -90,7 +72,7 @@ function Receiver() {
 
         audioCtx.current = new window.AudioContext()
 
-        console.log(audioCtx.current);
+        //console.log(audioCtx.current);
 
         //set up the different audio nodes we will use for the app
         analyser.current = audioCtx.current.createAnalyser()
@@ -104,9 +86,9 @@ function Receiver() {
         // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
         bufferLength.current = analyser.fftSize / 2; // somehow we need a bigger number here to visualize higher frequencies
         //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
-        console.log("BufferLength:" + bufferLength)
+        console.log("BufferLength:" + bufferLength.current)
 
-        dataArray.current = new Float32Array(bufferLength)
+        dataArray.current = new Float32Array(bufferLength.current)
 
         //console.log("sample rate " + audioCtx.sampleRate);
 
@@ -160,12 +142,12 @@ function Receiver() {
 
     function freq2index(freq){
         // i * ((audioCtx.sampleRate/2) / bufferLength) = f
-        return (2*bufferLength*freq)/audioCtx.sampleRate
+        return (2*bufferLength.current*freq)/(audioCtx.current.sampleRate)
     }
 
     function index2freq(i){
         // i * ((audioCtx.sampleRate/2) / bufferLength) = f
-        return Math.round((i*audioCtx.sampleRate)/(2*bufferLength))
+        return Math.round((i*audioCtx.current.sampleRate)/(2*bufferLength.current))
     }
 
     function binary2text(binaryStr){
@@ -178,8 +160,6 @@ function Receiver() {
         }
         return finalStr
     }
-
-
 
     function voiceMute() {
 
@@ -212,38 +192,38 @@ function Receiver() {
 
     }
 
-    let frequencies = []
 
     function detectSpikes_float_mfsk() {
         /*if(muted===true){console.log("muted"); return} // does nothing when muted*/
         //console.log("pirililalau")
 
-        console.log("audioCtx.state: " + audioCtx.current.state);
+        //console.log("audioCtx.state: " + audioCtx.current.state);
 
         //let indices = []
         let i
         analyser.current.getFloatFrequencyData(dataArray.current);
-        console.log(dataArray.current[29])
+        //console.log(dataArray.current)
 
 
         let maxIndex, maxValue=-9999;
         // find the biggest value in the range
         let myMinSpikeIndex=Math.round(freq2index(settings.Code00-100))
         let myMaxSpikeIndex=Math.round(freq2index(settings.Code11+100))
+        console.log("myMinSpikeIndex: "+myMinSpikeIndex+"   myMaxSpikeIndex: "+myMaxSpikeIndex)
         for(let k=myMinSpikeIndex; k<myMaxSpikeIndex ; k++){
             //console.log(dataArray[k] + " -> " + k);
-            if(dataArray[k]>=maxValue){
-                maxValue=dataArray[k];
+            if(dataArray.current[k]>=maxValue){
+                maxValue=dataArray.current[k];
                 maxIndex=k;
             }
         }
-        //console.log("MAX ->>> " + maxValue + "->" + maxIndex + "->" + index2freq(maxIndex));
+        console.log("MAX ->>> " + maxValue + "->" + maxIndex + "->" + index2freq(maxIndex));
 
         // get avg of everything but the max index and the two surrounding it
         let avgDB=0
         for(i = myMinSpikeIndex-Math.round(freq2index(settings.hzBuffer)); i < myMaxSpikeIndex+Math.round(freq2index(settings.hzBuffer)); i++) {
             if(i!==maxIndex-1 && i!==maxIndex && i!==maxIndex+1){
-                avgDB += dataArray[i]
+                avgDB += dataArray.current[i]
             }
         }
         avgDB /= ((myMaxSpikeIndex+Math.round(freq2index(settings.hzBuffer)))-(myMinSpikeIndex-Math.round(freq2index(settings.hzBuffer)))-3)
@@ -253,7 +233,7 @@ function Receiver() {
         //console.log("->"+detectDBaddedToAvg_float);
 
         //console.log(avgDB+settings.detectDBaddedToAvg_float)
-        //console.log("dataArray[maxIndex]:"+dataArray[maxIndex] + " detectDBaddedToAvg_float:" + dbToBeat)
+        //console.log("dataArray.current[maxIndex]:"+dataArray.current[maxIndex] + " detectDBaddedToAvg_float:" + dbToBeat)
 
         /*console.log(typeof puta);
         console.log(puta);
@@ -261,7 +241,7 @@ function Receiver() {
         console.log(dataArray[maxIndex]);*/
         //console.log(dataArray[maxIndex] > dbToBeat)
 
-        if(dataArray[maxIndex]>dbToBeat){
+        if(dataArray.current[maxIndex]>dbToBeat){
             setRipplesStatus({"visibility": "visible"})
             /*console.log("Frequencies:" + frequencies.toString()+";")
             console.log("Indices:" + indices.toString()+";")*/
