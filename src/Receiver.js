@@ -13,7 +13,7 @@ function Receiver() {
 
     const [ledStatus, setLedStatus] = useState("led-off");
     const [ripplesStatus, setRipplesStatus] = useState({"visibility": "hidden"});
-
+    const [outputValue, setOutputValue] = useState("");
 
     const audioCtx = useRef()
     const analyser = useRef()
@@ -30,40 +30,6 @@ function Receiver() {
 
     let frequencies = []
 
-
-
-    /*useEffect(() => {
-
-        console.log("start use effect");
-
-        setAudioCtx( new window.AudioContext() )
-
-        //set up the different audio nodes we will use for the app
-        setAnalyser(audioCtx.createAnalyser() )
-        //analyser.minDecibels = settings.minDecibels;
-        //analyser.maxDecibels = settings.maxDecibels;
-        analyser.smoothingTimeConstant = settings.smoothingTimeConstant;
-
-        //analyser.fftSize = settings.fftSize; // directly related to amount of bars. (2^n)
-        //console.log("analyser.fftSize"+analyser.fftSize/2)
-
-        // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
-        setBufferLength(state => (analyser.fftSize/2)); // somehow we need a bigger number here to visualize higher frequencies
-        //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
-        console.log("BufferLength:"+bufferLength)
-
-        //setDataArray(state => ({ ...state, new Float32Array(bufferLength) }))
-
-        //console.log("sample rate " + audioCtx.sampleRate);
-
-        //setDistortion( state => ({ ...state, audioCtx.createWaveShaper() }) );
-        //setGainNode( state => ({ ...state, audioCtx.createGain() }) );
-        //setBiquadFilter( state => ({ ...state, audioCtx.createBiquadFilter() }) );
-        //setConvolver( state => ({ ...state, audioCtx.createConvolver() }) );
-
-        //audioCtx.suspend()
-        //setupAudio()
-    });*/
 
     /*useEffect(() => {
         muted.current = true
@@ -88,7 +54,7 @@ function Receiver() {
         // fftSize -> A higher value will result in more details in the frequency domain but fewer details in the time domain.
         bufferLength.current = (analyser.current.fftSize / 2); // somehow we need a bigger number here to visualize higher frequencies
         //setBufferLength(state => (69)); // somehow we need a bigger number here to visualize higher frequencies
-        console.log("BufferLength:" + bufferLength.current)
+        //console.log("BufferLength:" + bufferLength.current)
 
         dataArray.current = new Float32Array(bufferLength.current)
 
@@ -170,7 +136,7 @@ function Receiver() {
 
         /*if (audioCtx.state === 'suspended') {*/
         if (muted.current === true) {
-            console.log("mutedSetToFalse");
+            //console.log("mutedSetToFalse");
             //setMuted(false)
             //statusLED.className = 'led-on';
             setLedStatus('led-on')
@@ -181,7 +147,7 @@ function Receiver() {
             //console.log(settings.msBetweenDetectSpikes);
         }
         else{
-            console.log("mutedSetToTrue");
+            //console.log("mutedSetToTrue");
             //setMuted(true)
             //console.log("muted2: " + muted);
             setLedStatus('led-off')
@@ -205,14 +171,14 @@ function Receiver() {
         //let indices = []
         let i
         analyser.current.getFloatFrequencyData(dataArray.current);
-        console.log(dataArray.current)
+        //console.log(dataArray.current)
 
 
         let maxIndex, maxValue=-9999;
         // find the biggest value in the range
         let myMinSpikeIndex=Math.round(freq2index(settings.Code00-100))
         let myMaxSpikeIndex=Math.round(freq2index(settings.Code11+100))
-        console.log("myMinSpikeIndex: "+myMinSpikeIndex+"   myMaxSpikeIndex: "+myMaxSpikeIndex)
+        //console.log("myMinSpikeIndex: "+myMinSpikeIndex+"   myMaxSpikeIndex: "+myMaxSpikeIndex)
         for(let k=myMinSpikeIndex; k<myMaxSpikeIndex ; k++){
             //console.log(dataArray[k] + " -> " + k);
             if(dataArray.current[k]>=maxValue){
@@ -220,7 +186,7 @@ function Receiver() {
                 maxIndex=k;
             }
         }
-        console.log("MAX ->>> " + maxValue + "->" + maxIndex + "->" + index2freq(maxIndex));
+        //console.log("MAX ->>> " + maxValue + "->" + maxIndex + "->" + index2freq(maxIndex));
 
         // get avg of everything but the max index and the two surrounding it
         let avgDB=0
@@ -271,7 +237,7 @@ function Receiver() {
         }*/
 
         if(consecutiveRunsWithoutSpikes>settings.maxConsecutiveRunsWithoutSpikes){
-            console.log("Stopedd");
+            //console.log("Stopedd");
             consecutiveRunsWithoutSpikes=0 // reset value
             setRipplesStatus({"visibility": "hidden"})
             voiceMute()
@@ -291,7 +257,7 @@ function Receiver() {
 
         let messageFreq = []
 
-        console.log("frequencies:"+frequencies);
+        //console.log("frequencies:"+frequencies);
 
         // Round frequencies and append to messafeFreq
         while(frequencies.length!==0){
@@ -304,7 +270,7 @@ function Receiver() {
         // middle -> middle+offset = 1
         let msgDecoded = ""
 
-        console.log(messageFreq)
+        //console.log(messageFreq)
         //let cleanedMessageFreq = cleanDuplicates(messageFreq)
         //console.log("cleanedMessageFreq lenght=" + cleanedMessageFreq.length)
 
@@ -329,9 +295,9 @@ function Receiver() {
 
         //console.log(repetitionsArray[0][1])
 
-        for(let arr of repetitionsArray){
+        /*for(let arr of repetitionsArray){
             console.log(arr + "\n")
-        }
+        }*/
         //console.log(repetitionsArray)
         let minimumValue
         let numberOfSignals
@@ -354,7 +320,7 @@ function Receiver() {
                 }
             }
 
-            console.log("numberOfSignals:" + numberOfSignals);
+            //console.log("numberOfSignals:" + numberOfSignals);
 
             if(repetitionsArray[i][0]===Code00){
 
@@ -398,8 +364,8 @@ function Receiver() {
         //return binary2text(msgDecoded.slice(0,msgDecoded.length))
         console.log(binary2text(msgDecoded.slice(0,msgDecoded.length)))
 
-        output.className = "outputCorrect"
-        output.value = binary2text(msgDecoded.slice(0,msgDecoded.length))
+        //output.className = "outputCorrect"
+        setOutputValue( binary2text(msgDecoded.slice(0,msgDecoded.length)) )
     }
 
     return (
@@ -413,10 +379,7 @@ function Receiver() {
                 </div>
             </div>
 
-            <input disabled="disabled" id="outputForMsg" placeholder="recieved text here"/>
-
-            <p>muted is {muted.current.toString()}</p>
-            <p>bufferLenght is {bufferLength.current}</p>
+            <input disabled="disabled" id="outputForMsg" placeholder="recieved text here" value={outputValue}/>
 
             <button onClick={voiceMute}>
                 Toggle Mute
