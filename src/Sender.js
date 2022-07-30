@@ -153,7 +153,10 @@ function Sender() {
 
             <br/><br/>
 
-            <input type="text" ref={inputValue} autoComplete="off" id="msgToSend" placeholder="text here"/>
+            <input type="text" ref={inputValue} autoComplete="off" id="msgToSend" placeholder="Text to send here"/>
+
+            <br/><br/>
+
             <button onClick={sendMFSK}>
                 Send
             </button>

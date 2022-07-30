@@ -218,6 +218,8 @@ function SetSettings() {
 
             </form>
 
+            <br/><br/>
+
             <button id="submitFormBtn" type="submit" form="settingsForm" value="Update">Submit form</button>
 
         </div>

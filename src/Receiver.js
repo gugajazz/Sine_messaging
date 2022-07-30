@@ -369,7 +369,7 @@ function Receiver() {
     }
 
     return (
-        <div className="controls">
+        <div>
 
 
 
@@ -381,7 +381,9 @@ function Receiver() {
                 </div>
             </div>
 
-            <input disabled="disabled" id="outputForMsg" placeholder="recieved text here" value={outputValue}/>
+            <input disabled="disabled" id="outputForMsg" placeholder="Recieved text here" value={outputValue}/>
+
+            <br/><br/>
 
             <button onClick={voiceMute}>
                 Toggle Mute
