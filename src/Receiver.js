@@ -371,6 +371,8 @@ function Receiver() {
     return (
         <div className="controls">
 
+
+
             <div className="outerbox">
                 <div className={ledStatus} id="statusLED"></div>
                 <div style={ripplesStatus} className="lds-ripple">

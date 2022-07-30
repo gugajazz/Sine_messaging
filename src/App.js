@@ -22,6 +22,9 @@ function App() {
     if (nextPage === "receive") {
         return (
             <div>
+
+                <button id="gearBtn">⚙</button>
+
                 <br/><br/>
 
                 <button onClick={ () => {
