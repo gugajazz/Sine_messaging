@@ -23,7 +23,9 @@ function App() {
         return (
             <div>
 
-                <button id="gearBtn">⚙</button>
+                <button id="gearBtn" onClick={ () => {
+                    setPage("settings")
+                }}>⚙</button>
 
                 <br/><br/><br/><br/>
 
@@ -35,7 +37,6 @@ function App() {
 
                 <Sender/>
 
-                <SetSettings/>
             </div>
         )
     }
@@ -43,7 +44,11 @@ function App() {
         return (
 
             <div>
-                <br/><br/>
+                <button id="gearBtn" onClick={ () => {
+                    setPage("settings")
+                }}>⚙</button>
+
+                <br/><br/><br/><br/>
 
                 <button onClick={ () => {
                     setPage("receive")
@@ -52,6 +57,29 @@ function App() {
                 </button>
 
                 <Receiver/>
+            </div>
+
+        )
+    }
+    else if(nextPage === "settings"){
+        return (
+
+            <div>
+                <br/><br/>
+
+                <button onClick={ () => {
+                    setPage("send")
+                }}>
+                    Go To Receive
+                </button>
+
+                <button onClick={ () => {
+                    setPage("receive")
+                }}>
+                    Go To Send
+                </button>
+
+                <SetSettings/>
             </div>
 
         )
