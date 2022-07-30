@@ -4,6 +4,8 @@ import settings from "./settings";
 import {useRef, useState} from "react";
 import Sender from "./Sender";
 import Receiver from "./Receiver";
+import Settings from "./settings";
+import SetSettings from "./SetSettings";
 
 // TODO when building minimize and ofuscate the code
 // TODO on page itself modify the settings.js (and remove unused stuff)
@@ -29,6 +31,8 @@ function App() {
                 </button>
 
                 <Sender/>
+
+                <SetSettings/>
             </div>
         )
     }
@@ -50,26 +54,7 @@ function App() {
         )
     }
 
-    return (
 
-        <div>
-            <br/><br/>
-
-            <button onClick={ () => {
-                if (nextPage === "receive") {
-                    setPage("send")
-                } else {
-                    setPage("receive")
-                }
-            }}>
-                Go To {nextPage}
-            </button>
-
-
-            <Sender/>
-        </div>
-
-    );
 
 
 }
