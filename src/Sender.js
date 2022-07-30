@@ -59,7 +59,7 @@ function Sender() {
             oscillator.start()
 
             //audioCtx.resume()
-            let timeDelay = settings.msgBitDelay
+            let timeDelay = settings.msgBaudDelay
             //timeDelay = 0
             let bursts = 0
 
@@ -68,7 +68,7 @@ function Sender() {
 
             for (let i = 0; i < binaryStr.length; i = i + 2) {
                 if (binaryStr[i] === "0" && binaryStr[i + 1] === "0") {
-                    delayToSet += settings.msgBitDelay
+                    delayToSet += settings.msgBaudDelay
                     //console.log(delayToSet);
                     delay(delayToSet).then(() => {
                         oscillator.frequency.setValueAtTime(Code00, audioCtx.currentTime); // value in hertz
@@ -77,7 +77,7 @@ function Sender() {
                     });
                     if (i === binaryStr.length - 2) {
                         //console.log("fim");
-                        delayToSet += (settings.msgBitDelay - delayToRemoveOnLast)
+                        delayToSet += (settings.msgBaudDelay - delayToRemoveOnLast)
                         delay(delayToSet).then(() => {
                             oscillator.stop()
                             console.log(arrayOfFrequenciesSent)
@@ -85,7 +85,7 @@ function Sender() {
                         });
                     }
                 } else if (binaryStr[i] === "0" && binaryStr[i + 1] === "1") {
-                    delayToSet += settings.msgBitDelay
+                    delayToSet += settings.msgBaudDelay
                     //console.log(delayToSet);
                     delay(delayToSet).then(() => {
                         oscillator.frequency.setValueAtTime(Code01, audioCtx.currentTime); // value in hertz
@@ -94,7 +94,7 @@ function Sender() {
                     });
                     if (i === binaryStr.length - 2) {
                         //console.log("fim");
-                        delayToSet += (settings.msgBitDelay - delayToRemoveOnLast)
+                        delayToSet += (settings.msgBaudDelay - delayToRemoveOnLast)
                         delay(delayToSet).then(() => {
                             oscillator.stop()
                             console.log(arrayOfFrequenciesSent)
@@ -102,7 +102,7 @@ function Sender() {
                         });
                     }
                 } else if (binaryStr[i] === "1" && binaryStr[i + 1] === "0") {
-                    delayToSet += settings.msgBitDelay
+                    delayToSet += settings.msgBaudDelay
                     //console.log(delayToSet);
                     delay(delayToSet).then(() => {
                         oscillator.frequency.setValueAtTime(Code10, audioCtx.currentTime); // value in hertz
@@ -112,7 +112,7 @@ function Sender() {
                     });
                     if (i === binaryStr.length - 2) {
                         //console.log("fim");
-                        delayToSet += (settings.msgBitDelay - delayToRemoveOnLast)
+                        delayToSet += (settings.msgBaudDelay - delayToRemoveOnLast)
                         delay(delayToSet).then(() => {
                             oscillator.stop()
                             console.log(arrayOfFrequenciesSent)
@@ -120,7 +120,7 @@ function Sender() {
                         });
                     }
                 } else if (binaryStr[i] === "1" && binaryStr[i + 1] === "1") {
-                    delayToSet += settings.msgBitDelay
+                    delayToSet += settings.msgBaudDelay
                     //console.log(delayToSet);
                     delay(delayToSet).then(() => {
                         oscillator.frequency.setValueAtTime(Code11, audioCtx.currentTime); // value in hertz
@@ -129,7 +129,7 @@ function Sender() {
                     });
                     if (i === binaryStr.length - 2) {
                         //console.log("fim");
-                        delayToSet += (settings.msgBitDelay - delayToRemoveOnLast)
+                        delayToSet += (settings.msgBaudDelay - delayToRemoveOnLast)
                         delay(delayToSet).then(() => {
                             oscillator.stop()
                             console.log(arrayOfFrequenciesSent)

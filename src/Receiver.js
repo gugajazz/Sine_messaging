@@ -310,8 +310,8 @@ function Receiver() {
             for(d=1; d<11 ; d++){ // todo change this because its possible fpr there to be more then 10 repetitions of the same 2 bits
                 //console.log("abs:"+Math.abs(((repetitionsArray[i][1] / d) / 20) - 1)
                 //+"minimum:"+minimumValue);
-                let a = (settings.msgBitDelay / 10) // how many signals we should capture for each 2 bits
-                let b = (settings.msgBitDelay / 20) // the half-way point ( ex: if we should capture 10 signals for each 2 bits this should be 5 )
+                let a = (settings.msgBaudDelay / 10) // how many signals we should capture for each 2 bits
+                let b = (settings.msgBaudDelay / 20) // the half-way point ( ex: if we should capture 10 signals for each 2 bits this should be 5 )
                 //console.log("a"+a+" b"+b);
                 if(Math.abs(repetitionsArray[i][1]-a*d)<=b){
                     //minimumValue=Math.abs(((repetitionsArray[i][1]/d)/20)-1)

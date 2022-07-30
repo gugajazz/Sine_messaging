@@ -6,7 +6,7 @@ const settings={
     "Code01" : 18400,   // 13400
     "Code10" : 18600,   // 13600
     "Code11" : 18800,   // 13800
-    "msgBitDelay": 200, // 50 is the lowest possible with Float
+    "msgBaudDelay": 200, // 50 is the lowest possible with Float
 
     // Receiver
     "fftSize": 4096,
