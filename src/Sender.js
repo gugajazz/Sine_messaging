@@ -148,7 +148,8 @@ function Sender() {
 
     return (
 
-        <div className="controls">
+        <div>
+
 
             <br/><br/>
 

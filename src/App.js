@@ -25,7 +25,7 @@ function App() {
 
                 <button id="gearBtn">⚙</button>
 
-                <br/><br/>
+                <br/><br/><br/><br/>
 
                 <button onClick={ () => {
                         setPage("send")
