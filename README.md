@@ -20,7 +20,7 @@ etc
 **Building and deploying to github pages**
 
 On main branch run `npm run build`.
-Copy the contents of the ``build`` folder, go to the build branch and copy them.
+Copy the contents of the ``build`` folder, go to the build branch and paste them.
 Then just commit and push.
 
 Warning : Make sure that on `package.json` there is the folowing line ``"homepage": ".",``.
