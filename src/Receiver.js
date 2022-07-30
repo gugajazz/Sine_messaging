@@ -197,12 +197,12 @@ function Receiver() {
         }
         avgDB /= ((myMaxSpikeIndex+Math.round(freq2index(settings.hzBuffer)))-(myMinSpikeIndex-Math.round(freq2index(settings.hzBuffer)))-3)
 
-        let detectDBaddedToAvg_float = parseFloat(settings.detectDBaddedToAvg_float)
-        let dbToBeat = (avgDB+detectDBaddedToAvg_float)
-        //console.log("->"+detectDBaddedToAvg_float);
+        let detectDBaddedToAvg = parseFloat(settings.detectDBaddedToAvg)
+        let dbToBeat = (avgDB+detectDBaddedToAvg)
+        //console.log("->"+detectDBaddedToAvg);
 
-        //console.log(avgDB+settings.detectDBaddedToAvg_float)
-        //console.log("dataArray.current[maxIndex]:"+dataArray.current[maxIndex] + " detectDBaddedToAvg_float:" + dbToBeat)
+        //console.log(avgDB+settings.detectDBaddedToAvg)
+        //console.log("dataArray.current[maxIndex]:"+dataArray.current[maxIndex] + " detectDBaddedToAvg:" + dbToBeat)
 
         /*console.log(typeof puta);
         console.log(puta);
@@ -236,7 +236,7 @@ function Receiver() {
             consecutiveRunsWithoutSpikes++;
         }*/
 
-        if(consecutiveRunsWithoutSpikes>settings.maxConsecutiveRunsWithoutSpikes){
+        if(consecutiveRunsWithoutSpikes>settings.maxRunsNoSpikes){
             //console.log("Stopedd");
             consecutiveRunsWithoutSpikes=0 // reset value
             setRipplesStatus({"visibility": "hidden"})
