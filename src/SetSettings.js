@@ -76,7 +76,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={Code00}
-                    onChange={event => setCode00(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setCode00("")}
+                        else if(!isNaN(event.target.value)){
+                            setCode00(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.Code00.toString()}
                 />
 
@@ -84,23 +89,38 @@ function SetSettings() {
                 <input
                     type="text"
                     value={Code01}
-                    onChange={event => setCode01(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setCode01("")}
+                        else if(!isNaN(event.target.value)){
+                            setCode01(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.Code01.toString()}
                 />
 
-                <label>Code00</label>
+                <label>Code10</label>
                 <input
                     type="text"
                     value={Code10}
-                    onChange={event => setCode10(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setCode10("")}
+                        else if(!isNaN(event.target.value)){
+                            setCode10(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.Code10.toString()}
                 />
 
-                <label>Code00</label>
+                <label>Code11</label>
                 <input
                     type="text"
                     value={Code11}
-                    onChange={event => setCode11(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setCode11("")}
+                        else if(!isNaN(event.target.value)){
+                            setCode11(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.Code11.toString()}
                 />
 
@@ -108,7 +128,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={msgBaudDelay}
-                    onChange={event => setMsgBaudDelay(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setMsgBaudDelay("")}
+                        else if(!isNaN(event.target.value)){
+                            setMsgBaudDelay(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.msgBaudDelay.toString()}
                 />
 
@@ -116,7 +141,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={fftSize}
-                    onChange={event => setFftSize(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setFftSize("")}
+                        else if(!isNaN(event.target.value)){
+                            setFftSize(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.fftSize.toString()}
                 />
 
@@ -124,7 +154,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={msBetweenDetectSpikes}
-                    onChange={event => setMsBetweenDetectSpikes(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setMsBetweenDetectSpikes("")}
+                        else if(!isNaN(event.target.value)){
+                            setMsBetweenDetectSpikes(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.msBetweenDetectSpikes.toString()}
                 />
 
@@ -132,7 +167,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={maxRunsNoSpikes}
-                    onChange={event => setMaxRunsNoSpikes(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setMaxRunsNoSpikes("")}
+                        else if(!isNaN(event.target.value)){
+                            setMaxRunsNoSpikes(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.maxRunsNoSpikes.toString()}
                 />
 
@@ -140,23 +180,26 @@ function SetSettings() {
                 <input
                     type="text"
                     value={detectDBaddedToAvg}
-                    onChange={event => setDetectDBaddedToAvg(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setDetectDBaddedToAvg("")}
+                        else if(!isNaN(event.target.value)){
+                            setDetectDBaddedToAvg(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.detectDBaddedToAvg.toString()}
                 />
 
-                {/*<label>setDetectDBaddedToAvg</label>
-                <input
-                    type="text"
-                    value={detectDBaddedToAvg}
-                    onChange={event => setDetectDBaddedToAvg(parseInt(event.target.value))}
-                    placeholder={settings.detectDBaddedToAvg.toString()}
-                />*/}
 
                 <label>hzBuffer</label>
                 <input
                     type="text"
                     value={hzBuffer}
-                    onChange={event => setHzBuffer(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setHzBuffer("")}
+                        else if(!isNaN(event.target.value)){
+                            setHzBuffer(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.hzBuffer.toString()}
                 />
 
@@ -164,7 +207,12 @@ function SetSettings() {
                 <input
                     type="text"
                     value={spikesRoundTo}
-                    onChange={event => setSpikesRoundTo(parseInt(event.target.value))}
+                    onChange={event => {
+                        if(event.target.value===""){setSpikesRoundTo("")}
+                        else if(!isNaN(event.target.value)){
+                            setSpikesRoundTo(parseInt(event.target.value))
+                        }
+                    }}
                     placeholder={settings.spikesRoundTo.toString()}
                 />
 
