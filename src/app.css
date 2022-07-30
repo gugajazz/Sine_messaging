@@ -124,14 +124,11 @@ body {
 }
 
 h1, h2, label {
-  font-size: 3rem;
-  text-align: center;
-  color: black;
-  text-shadow: -1px -1px 1px #aaa,
-               0px 1px 1px rgba(255, 200, 18, 0.51),
-               1px 1px 2px rgba(255, 200, 18,0.7),
-               0px 0px 2px rgba(255, 200, 18,0.4);
-  margin: 0;
+    font-size: 3rem;
+    text-align: center;
+    color: rgba(255, 200, 18,255);
+    text-shadow: 0.8px 0.8px 0.8px black;
+    margin: 0;
 }
 
 input{
@@ -195,9 +192,9 @@ canvas {
 
 .controls label {
   width: 100%;
-  text-align: center;
+  /*text-align: center;*/
   line-height: 3rem;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
 }
 
 .controls select {
@@ -222,12 +219,27 @@ button {
     display: block;
 }
 
+
 form{
+    display:grid;
+    grid-template-columns: max-content max-content;
+    grid-gap:5px;
+    justify-content: center;
     text-align: center;
 }
 
-form button {
+#submitFormBtn {
+    /*position: ;*/
     width: 50%;
+}
+
+form label {
+    text-align:right;
+    font-size: 1.7rem;
+}
+
+form label:after {
+    content: ":";
 }
 
 form input {

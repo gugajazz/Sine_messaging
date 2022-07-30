@@ -11,8 +11,8 @@ const settings={
     // Receiver
     "fftSize": 4096,
     "msBetweenDetectSpikes" : 10,
-    "maxConsecutiveRunsWithoutSpikes": 50,
-    "detectDBaddedToAvg_float": 15,
+    "maxRunsNoSpikes": 50,
+    "detectDBaddedToAvg": 15,
     "hzBuffer": 200,
     "spikesRoundTo": 100, // should be same as msgLowHighHzOffset but might be useful in the future
     "smoothingTimeConstant": 0,

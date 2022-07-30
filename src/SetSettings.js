@@ -13,8 +13,8 @@ function SetSettings() {
     const [msgBaudDelay, setMsgBaudDelay] = useState(settings.msgBaudDelay);
     const [fftSize, setFftSize] = useState(settings.fftSize);
     const [msBetweenDetectSpikes, setMsBetweenDetectSpikes] = useState(settings.msBetweenDetectSpikes);
-    const [maxConsecutiveRunsWithoutSpikes, setMaxConsecutiveRunsWithoutSpikes] = useState(settings.maxConsecutiveRunsWithoutSpikes);
-    const [detectDBaddedToAvg_float, setDetectDBaddedToAvg_float] = useState(settings.detectDBaddedToAvg_float);
+    const [maxRunsNoSpikes, setMaxRunsNoSpikes] = useState(settings.maxRunsNoSpikes);
+    const [detectDBaddedToAvg, setDetectDBaddedToAvg] = useState(settings.detectDBaddedToAvg);
     const [hzBuffer, setHzBuffer] = useState(settings.hzBuffer);
     const [spikesRoundTo, setSpikesRoundTo] = useState(settings.spikesRoundTo);
 
@@ -26,8 +26,8 @@ function SetSettings() {
         setMsgBaudDelay("");
         setFftSize("");
         setMsBetweenDetectSpikes("");
-        setMaxConsecutiveRunsWithoutSpikes("");
-        setDetectDBaddedToAvg_float("");
+        setMaxRunsNoSpikes("");
+        setDetectDBaddedToAvg("");
         setHzBuffer("");
         setSpikesRoundTo("");
     }, []);
@@ -44,8 +44,8 @@ function SetSettings() {
         if(typeof msgBaudDelay==="number"){ settings.msgBaudDelay = msgBaudDelay }
         if(typeof fftSize==="number"){ settings.fftSize = fftSize }
         if(typeof msBetweenDetectSpikes==="number"){ settings.msBetweenDetectSpikes = msBetweenDetectSpikes }
-        if(typeof maxConsecutiveRunsWithoutSpikes==="number"){ settings.maxConsecutiveRunsWithoutSpikes = maxConsecutiveRunsWithoutSpikes }
-        if(typeof detectDBaddedToAvg_float==="number"){ settings.detectDBaddedToAvg_float = detectDBaddedToAvg_float }
+        if(typeof maxRunsNoSpikes==="number"){ settings.maxRunsNoSpikes = maxRunsNoSpikes }
+        if(typeof detectDBaddedToAvg==="number"){ settings.detectDBaddedToAvg = detectDBaddedToAvg }
         if(typeof hzBuffer==="number"){ settings.hzBuffer = hzBuffer }
         if(typeof spikesRoundTo==="number"){ settings.spikesRoundTo = spikesRoundTo }
 
@@ -58,8 +58,8 @@ function SetSettings() {
         setMsgBaudDelay("");
         setFftSize("");
         setMsBetweenDetectSpikes("");
-        setMaxConsecutiveRunsWithoutSpikes("");
-        setDetectDBaddedToAvg_float("");
+        setMaxRunsNoSpikes("");
+        setDetectDBaddedToAvg("");
         setHzBuffer("");
         setSpikesRoundTo("");
 
@@ -70,8 +70,9 @@ function SetSettings() {
         <div className="controls">
 
 
-            <form onSubmit={handleSubmit}>
+            <form id="settingsForm" onSubmit={handleSubmit}>
 
+                <label>Code00</label>
                 <input
                     type="text"
                     value={Code00}
@@ -79,6 +80,7 @@ function SetSettings() {
                     placeholder={settings.Code00.toString()}
                 />
 
+                <label>Code01</label>
                 <input
                     type="text"
                     value={Code01}
@@ -86,6 +88,7 @@ function SetSettings() {
                     placeholder={settings.Code01.toString()}
                 />
 
+                <label>Code00</label>
                 <input
                     type="text"
                     value={Code10}
@@ -93,6 +96,7 @@ function SetSettings() {
                     placeholder={settings.Code10.toString()}
                 />
 
+                <label>Code00</label>
                 <input
                     type="text"
                     value={Code11}
@@ -100,6 +104,7 @@ function SetSettings() {
                     placeholder={settings.Code11.toString()}
                 />
 
+                <label>msgBaudDelay</label>
                 <input
                     type="text"
                     value={msgBaudDelay}
@@ -107,6 +112,7 @@ function SetSettings() {
                     placeholder={settings.msgBaudDelay.toString()}
                 />
 
+                <label>fftSize</label>
                 <input
                     type="text"
                     value={fftSize}
@@ -114,6 +120,7 @@ function SetSettings() {
                     placeholder={settings.fftSize.toString()}
                 />
 
+                <label>msBetweenDetectSpikes</label>
                 <input
                     type="text"
                     value={msBetweenDetectSpikes}
@@ -121,20 +128,31 @@ function SetSettings() {
                     placeholder={settings.msBetweenDetectSpikes.toString()}
                 />
 
+                <label>setMaxRunsNoSpikes</label>
                 <input
                     type="text"
-                    value={maxConsecutiveRunsWithoutSpikes}
-                    onChange={event => setMaxConsecutiveRunsWithoutSpikes(parseInt(event.target.value))}
-                    placeholder={settings.maxConsecutiveRunsWithoutSpikes.toString()}
+                    value={maxRunsNoSpikes}
+                    onChange={event => setMaxRunsNoSpikes(parseInt(event.target.value))}
+                    placeholder={settings.maxRunsNoSpikes.toString()}
                 />
 
+                <label>detectDBaddedToAvg</label>
                 <input
                     type="text"
-                    value={detectDBaddedToAvg_float}
-                    onChange={event => setDetectDBaddedToAvg_float(parseInt(event.target.value))}
-                    placeholder={settings.detectDBaddedToAvg_float.toString()}
+                    value={detectDBaddedToAvg}
+                    onChange={event => setDetectDBaddedToAvg(parseInt(event.target.value))}
+                    placeholder={settings.detectDBaddedToAvg.toString()}
                 />
 
+                {/*<label>setDetectDBaddedToAvg</label>
+                <input
+                    type="text"
+                    value={detectDBaddedToAvg}
+                    onChange={event => setDetectDBaddedToAvg(parseInt(event.target.value))}
+                    placeholder={settings.detectDBaddedToAvg.toString()}
+                />*/}
+
+                <label>hzBuffer</label>
                 <input
                     type="text"
                     value={hzBuffer}
@@ -142,6 +160,7 @@ function SetSettings() {
                     placeholder={settings.hzBuffer.toString()}
                 />
 
+                <label>spikesRoundTo</label>
                 <input
                     type="text"
                     value={spikesRoundTo}
@@ -149,10 +168,9 @@ function SetSettings() {
                     placeholder={settings.spikesRoundTo.toString()}
                 />
 
-
-                <button type="submit">Submit form</button>
             </form>
 
+            <button id="submitFormBtn" type="submit" form="settingsForm" value="Update">Submit form</button>
 
         </div>
     );
