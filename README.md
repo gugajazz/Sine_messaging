@@ -28,8 +28,8 @@ Type your message ( Expect around 1s for each character to be sent on default se
 ## Receive data
 <img src="imgs/receive1.png" width="350">
 <img src="imgs/receive2.png" width="350">
-While waiting the red light will look as shown <img src="imgs/receive3.png" width="350">
-When a signal is coming in ripples will appear as shown <img src="imgs/receive4.png" width="350">
+While waiting the red light will look as shown <img src="imgs/receive3.png" width="150">
+When a signal is coming in ripples will appear as shown <img src="imgs/receive4.png" width="150">
 
 # Warnings
 By default, sine-messaging-react uses frequencies between 18200hz and 18800hz. Frequencies in this range usually aren't audible by humans but can and will still cause hearing damage if listened to at unsafe levels.\
