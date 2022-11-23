@@ -22,14 +22,14 @@ frequency represents, we know that the signal was `01110110` and can decode it t
 Navigate to https://gugajazz.github.io/sine_messaging_react on a chromium based browser.
 
 ## Send data
-<img src="imgs/send1.png" width="250">
+<img src="imgs/send1.png" width="350">
 Type your message ( Expect around 1s for each character to be sent on default settings )
 
 ## Receive data
-<img src="imgs/receive1.png" width="250">
-<img src="imgs/receive2.png" width="250">
-While waiting the red light will look as shown ![](imgs/receive3.png)
-When a signal is coming in ripples will appear as shown ![](imgs/receive4.png)
+<img src="imgs/receive1.png" width="350">
+<img src="imgs/receive2.png" width="350">
+While waiting the red light will look as shown <img src="imgs/receive3.png" width="350">
+When a signal is coming in ripples will appear as shown <img src="imgs/receive4.png" width="350">
 
 # Warnings
 By default, sine-messaging-react uses frequencies between 18200hz and 18800hz. Frequencies in this range usually aren't audible by humans but can and will still cause hearing damage if listened to at unsafe levels.\
