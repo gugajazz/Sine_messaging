@@ -3,6 +3,9 @@
 A website that uses javascript's web apis to send and receive data wirelessly between devices using only sound (At inaudible frequencies by default).\
 Regarding the front-end it was built using the React library.
 
+# How to use it
+Navigate to https://gugajazz.github.io/sine_messaging_react on a chromium based browser and continue reading.
+
 # How it works
 The text is converted to binary using Utf-8.\
 Using a AudioContext oscilator it generates and transmits through the speakers a sine wave of a specified frequency for some pre-determined milliseconds.\
@@ -18,9 +21,6 @@ When that happens it'll log the frequencies received over the duration of the me
 Finally it will read the data and decode it to binary by counting how long each sine wave lasted.\
 Ex: In a very simplified way, if it recorded the following frequenncies during the transmission `18400hz, 18800hz, 18200hz, 18600hz`, because we know what pair of bits each 
 frequency represents, we know that the signal was `01110110` and can decode it to obtain that character `v`.
-
-# How to use it
-Navigate to https://gugajazz.github.io/sine_messaging_react on a chromium based browser.
 
 ## Send data
 <img src="imgs/send1.png" width="350">
