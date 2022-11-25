@@ -1,6 +1,7 @@
 
 # What sine-messaging-react is
-A website that uses javascript's web apis to send and receive data wirelessly between devices using only sound (At inaudible frequencies by default).
+A website that uses javascript's web apis to send and receive data wirelessly between devices using only sound (At inaudible frequencies by default).\
+Regarding the front-end it was built using the React library.
 
 # How it works
 The text is converted to binary using Utf-8.\
