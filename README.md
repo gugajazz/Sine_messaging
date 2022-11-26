@@ -4,7 +4,7 @@ A website that uses javascript's web apis to send and receive data wirelessly be
 Regarding the front-end it was built using the React library.
 
 # How to use it
-Navigate to https://gugajazz.github.io/Sine_messaging_react on a chromium based browser and continue reading.
+Navigate to https://gugajazz.github.io/Sine_messaging on a chromium based browser and continue reading.
 
 # How it works
 The text is converted to binary using Utf-8.\
