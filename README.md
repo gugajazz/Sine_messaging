@@ -1,5 +1,5 @@
 
-# What sine-messaging-react is
+# What Sine-messaging is
 A website that uses javascript's web apis to send and receive data wirelessly between devices using only sound (At inaudible frequencies by default).\
 Regarding the front-end it was built using the React library.
 
@@ -33,7 +33,7 @@ While waiting the red light will look as shown <img src="imgs/receive3.png" widt
 When a signal is coming in ripples will appear as shown <img src="imgs/receive4.png" width="150">
 
 # Warnings
-By default, sine-messaging-react uses frequencies between 18200hz and 18800hz. Frequencies in this range usually aren't audible by humans but can and will still cause hearing damage if heard at unsafe levels.\
+By default, sine-messaging uses frequencies between 18200hz and 18800hz. Frequencies in this range usually aren't audible by humans but can and will still cause hearing damage if heard at unsafe levels.\
 It is then recommended  that for short range communication ( <5m ) the users use a low volume, which usually is enough, and increase it progressively if necessary to achieve reliability opperation at longer ranges.
 
 # Results
